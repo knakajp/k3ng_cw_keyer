@@ -1336,7 +1336,7 @@ Recent Update History
         Adds FEATURE_LCD_BACKLIGHT_AUTO_DIM
 
     2021.07.17.01
-      Added pins pin_sending_mode_automatic and pin_sending_mode_manual which go HIGH for automatic and manual sending modes 
+      Added pins pin_sending_mode_automatic and pin_sending_mode_manual which go HIGH for automatic and manual sending modes
 
     2021.12.16.01
       Merged pull request 114 https://github.com/k3ng/k3ng_cw_keyer/pull/114 Support for STM32F1 boards - Thanks, 7m4mon
@@ -1345,10 +1345,10 @@ Recent Update History
       Merged pull request 117 https://github.com/k3ng/k3ng_cw_keyer/pull/117 Support for LCD type: I2C 1602 with backlight using TwiLiquidCrystal library - Thanks, billyf
 
     2021.12.16.02
-      Merged pull request 86 https://github.com/k3ng/k3ng_cw_keyer/pull/86 SOS Prosign - Thanks, VK2EFL 
+      Merged pull request 86 https://github.com/k3ng/k3ng_cw_keyer/pull/86 SOS Prosign - Thanks, VK2EFL
 
     2021.12.16.03
-      Merged pull request 118 https://github.com/k3ng/k3ng_cw_keyer/pull/118 OLED SSD1306 Support - Thanks, F5MDY 
+      Merged pull request 118 https://github.com/k3ng/k3ng_cw_keyer/pull/118 OLED SSD1306 Support - Thanks, F5MDY
 
     2021.12.17.01
       Merged pull request 119 https://github.com/k3ng/k3ng_cw_keyer/pull/119/ Definable startup text (define HI_TEXT) - Thanks, ON6ZQ
@@ -1565,6 +1565,10 @@ If you offer a hardware kit using this software, show your appreciation by sendi
 
 #if defined(FEATURE_LCD_YDv1)
   #include <LiquidCrystal_I2C.h>
+#endif
+
+#if defined(FEATURE_LCD_ST7032_I2C)
+  #include <ST7032_asukiaaa.h>
 #endif
 
 #if defined(FEATURE_LCD_TWILIQUIDCRYSTAL)
@@ -2026,6 +2030,10 @@ byte send_buffer_status = SERIAL_SEND_BUFFER_NORMAL;
 #if defined(FEATURE_LCD_YDv1)
   //LiquidCrystal_I2C lcd(0x38);
   LiquidCrystal_I2C lcd(lcd_i2c_address_ydv1_lcd, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // for FEATURE_LCD_YDv1; set the LCD I2C address needed for LCM1602 IC V1
+#endif
+
+#if defined(FEATURE_LCD_ST7032_I2C)
+  ST7032_asukiaaa lcd(0x3E);
 #endif
 
 #if defined(FEATURE_LCD_TWILIQUIDCRYSTAL)
@@ -3762,7 +3770,7 @@ void lcd_center_print_timed(String lcd_print_string, byte row_number, unsigned i
   #ifndef FEATURE_OLED_SSD1306
     lcd.setCursor(((LCD_COLUMNS - lcd_print_string.length())/2),row_number);
   #else
-    if (lcd_print_string.length() <= LCD_COLUMNS ) 
+    if (lcd_print_string.length() <= LCD_COLUMNS )
         lcd.setCursor(((LCD_COLUMNS - lcd_print_string.length())/2)*11,2*row_number);
     else
          lcd.setCursor(0,2*row_number);
@@ -8122,7 +8130,7 @@ void command_mode() {
   #ifdef OPTION_WATCHDOG_TIMER
     wdt_enable(WDTO_4S);
   #endif //OPTION_WATCHDOG_TIMER
-	
+
   #ifdef FEATURE_DISPLAY
     lcd.clear();
     for (int x = 0; x < LCD_ROWS; x++) {        // as we exit, redraw the display that we had before we went into Command Mode
@@ -9630,7 +9638,7 @@ void send_char(byte cw_char, byte omit_letterspace)
         #if !defined(OPTION_CW_KEYBOARD_GERMAN) && !defined(OPTION_CW_KEYBOARD_ITALIAN) && !defined(OPTION_PS2_NON_ENGLISH_CHAR_LCD_DISPLAY_SUPPORT)
           case PROSIGN_OS: send_the_dits_and_dahs("---...");   break;
         #endif                                                                           // !defined(OPTION_CW_KEYBOARD_GERMAN) ....
-      #endif 
+      #endif
 
       #ifdef OPTION_NON_ENGLISH_EXTENSIONS
       case 192: send_the_dits_and_dahs(".--.-");break;// 'À'
@@ -13728,7 +13736,7 @@ void service_paddle_echo()
               secondary_serial_port->print(prosign_temp[0]);
               secondary_serial_port->print(prosign_temp[1]);
               if(strlen(prosign_temp) == 3) secondary_serial_port->print(prosign_temp[2]);
-            #endif //FEATURE_COMMAND_LINE_INTERFACE_ON_SECONDARY_PORT                      
+            #endif //FEATURE_COMMAND_LINE_INTERFACE_ON_SECONDARY_PORT
           } else {
             if (configuration.cli_mode == CLI_MILL_MODE_KEYBOARD_RECEIVE){
               primary_serial_port->println();
@@ -16028,8 +16036,8 @@ int convert_cw_number_to_ascii (long number_in) {
     case 112211: return '?'; break;  // ?
     case 21121: return 47; break;    // /
     #if !defined(OPTION_PROSIGN_SUPPORT)
-      case 2111212: return '*'; break; // BK 
-    #endif 
+      case 2111212: return '*'; break; // BK
+    #endif
     //case 221122: return 44; break;   // ,
     //case 221122: return '!'; break;  // ! sp5iou 20180328
     case 221122: return ','; break;
@@ -16104,7 +16112,7 @@ int convert_cw_number_to_ascii (long number_in) {
       case 221121: return 142; break;    // Ž
     #endif //OPTION_NON_ENGLISH_EXTENSIONS
 
-    default: 
+    default:
 
       #ifdef OPTION_UNKNOWN_CHARACTER_ERROR_TONE
         boop();
@@ -16665,7 +16673,7 @@ byte play_memory(byte memory_number) {
                         secondary_serial_port->print(prosign_temp[0]);
                         secondary_serial_port->print(prosign_temp[1]);
                         if(strlen(prosign_temp) == 3) secondary_serial_port->print(prosign_temp[2]);
-                      #endif //FEATURE_COMMAND_LINE_INTERFACE_ON_SECONDARY_PORT                      
+                      #endif //FEATURE_COMMAND_LINE_INTERFACE_ON_SECONDARY_PORT
                     } else {
                       primary_serial_port->write(eeprom_byte_read);
                       #ifdef FEATURE_COMMAND_LINE_INTERFACE_ON_SECONDARY_PORT
@@ -18036,11 +18044,11 @@ void initialize_keyer_state(){
 
   #ifdef __LGT8FX8P__
     /* LGT chip emulates EEPROM at the cost of giving up twice the space in program flash memory.
-     * Unortunately, the last 4 bytes of every 1KB block are read-only. Therefore 
+     * Unortunately, the last 4 bytes of every 1KB block are read-only. Therefore
      * EEPROM.length() would return 1024 (readable EEPROM size), while EEPROM.size() returns 1020
      * (writable EEPROM size). The following line will give the right figure for LGT.
      */
-    memory_area_end = EEPROM.size() - 1; 
+    memory_area_end = EEPROM.size() - 1;
   #elif (!defined(ARDUINO_SAM_DUE) || (defined(ARDUINO_SAM_DUE) && defined(FEATURE_EEPROM_E24C1024))) && !defined(HARDWARE_GENERIC_STM32F103C)
     memory_area_end = EEPROM.length() - 1;
   #else
@@ -18351,9 +18359,9 @@ void ps2int_write() {
 void initialize_display(){
 
 
-  #ifdef FEATURE_DISPLAY  
+  #ifdef FEATURE_DISPLAY
 
-    #ifdef FEATURE_OLED_SSD1306 
+    #ifdef FEATURE_OLED_SSD1306
       Wire.begin();
       Wire.setClock(400000L);
       lcd.begin(&Adafruit128x64, oled_i2c_address_ssd1306);
@@ -18366,21 +18374,25 @@ void initialize_display(){
         lcd.begin(LCD_COLUMNS, LCD_ROWS);
      #endif
     #endif
-    
+
     #ifdef FEATURE_LCD_ADAFRUIT_I2C
       lcd.setBacklight(lcdcolor);
     #endif //FEATURE_LCD_ADAFRUIT_I2C
 
+    #ifdef FEATURE_LCD_ST7032_I2C
+      lcd.setContrast(18);
+    #endif
+
     #ifdef FEATURE_LCD_TWILIQUIDCRYSTAL
       lcd.backlight();
     #endif
-    #ifdef FEATURE_LCD_ADAFRUIT_BACKPACK 
+    #ifdef FEATURE_LCD_ADAFRUIT_BACKPACK
       lcd.setBacklight(HIGH);
     #endif
     #ifdef FEATURE_LCD_MATHERTEL_PCF8574
       lcd.setBacklight(HIGH);
     #endif
-    
+
     #ifdef OPTION_DISPLAY_NON_ENGLISH_EXTENSIONS  // OZ1JHM provided code, cleaned up by LA3ZA
       // Store bit maps, designed using editor at http://omerk.github.io/lcdchargen/
 

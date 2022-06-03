@@ -2,7 +2,7 @@
 #ifndef keyer_pin_settings_h
 #define keyer_pin_settings_h
 
-#define paddle_left 2
+#define paddle_left 4
 #define paddle_right 5
 #define tx_key_line_1 11       // (high = key down/tx on)
 #define tx_key_line_2 12
@@ -10,8 +10,8 @@
 #define tx_key_line_4 0
 #define tx_key_line_5 0
 #define tx_key_line_6 0
-#define sidetone_line 4         // connect a speaker for sidetone
-#define potentiometer A0        // Speed potentiometer (0 to 5 V) Use pot from 1k to 10k
+#define sidetone_line 2         // connect a speaker for sidetone
+#define potentiometer A1        // Speed potentiometer (0 to 5 V) Use pot from 1k to 10k
 #define ptt_tx_1 0              // PTT ("push to talk") lines
 #define ptt_tx_2 0              //   Can be used for keying fox transmitter, T/R switch, or keying slow boatanchors
 #define ptt_tx_3 0              //   These are optional - set to 0 if unused
@@ -24,15 +24,15 @@
 #define potentiometer_enable_pin 0  // if defined, the potentiometer will be enabled only when this pin is held low; set to 0 to ignore this pin
 
 #ifdef FEATURE_BUTTONS
-  #define analog_buttons_pin A1
-  #define command_mode_active_led 0
+  #define analog_buttons_pin A0
+  #define command_mode_active_led 13
 #endif //FEATURE_BUTTONS
 
 /*
 FEATURE_SIDETONE_SWITCH
   Enabling this feature and an external toggle switch  adds switch control for playing cw sidetone.
   ST Switch status is displayed in the status command.  This feature will override the software control of the sidetone (\o).
-  Arduino pin is assigned by SIDETONE_SWITCH 
+  Arduino pin is assigned by SIDETONE_SWITCH
 */
 
 #ifdef FEATURE_SIDETONE_SWITCH
@@ -151,7 +151,7 @@ FEATURE_SIDETONE_SWITCH
 #define ptt_input_pin 0
 
 #define tx_inhibit_pin 0
-#define tx_pause_pin 0   
+#define tx_pause_pin 0
 
 #define pin_sending_mode_automatic 0  // goes HIGH when keyer is sending code automatically
 #define pin_sending_mode_manual 0     // goes HIGH when keyer is sending code manually (i.e. the paddle or straight key)
